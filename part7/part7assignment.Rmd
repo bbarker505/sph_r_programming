@@ -1,0 +1,103 @@
+---
+title: "Part 7 Assignment"
+author: "You"
+date: "2/17/2021"
+output: 
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+clinical <- readr::read_csv(here("data/part1/clinical.csv"),  na="NA") %>%
+  filter(!is.na(tumor_stage))
+
+clinical_list <- clinical %>%
+  group_by(tumor_stage) %>%
+  group_split(.keep=TRUE)
+  
+clinical_names <- clinical %>%
+  group_by(tumor_stage) %>%
+  group_keys() %>% unlist() 
+
+names(clinical_list) <- clinical_names
+```
+
+
+
+1. Write a function called `make_table()` that takes as an input a `df` (`data.frame`) and runs `janitor::tabyl` on the `vital_status` and `race` columns.
+
+Use it on one of the slots in `clinical_list`.
+
+```{r}
+make_table <- function(df){
+  out_table <- df %>% 
+    janitor::tabyl(------, ------)
+  return(out_table)  
+}
+
+make_table(---------)
+```
+
+2. Use `map()` to apply `make_table` to `clinical_list`.
+
+```{r}
+tumor_tables <- map(-------, -------)
+tumor_tables
+```
+
+3. For the data files in `data/part2`, use the `load_csv_files()` function to load the datasets.
+
+```{r functions}
+load_csv_files <- function(path = "data/part2/LUSC.csv"){
+  out_frame <- read_csv(path, na="NA")
+  out_frame <- janitor::clean_names(out_frame) %>%
+    mutate(source=path)
+  return(out_frame)
+}
+```
+
+```{r}
+part2_files <- list.files(here("data/part2"), full.names = TRUE, pattern="csv")
+part2_files
+
+part2_dfs <- map(part2_files, ------------)
+names(part2_dfs) <- part2_files
+```
+
+Confirm you have loaded the data correctly. You can do this by showing a slot or by showing the whole list.
+
+```{r}
+
+
+```
+
+4. Write a function called `plot_boxplot()` to make a boxplot with x = `tumor_stage` and y = `cigarettes_per_day`, and fill = `tumor_stage` from an input `data.frame` called `df`. 
+
+Use the function on the first slot of 
+
+
+```{r}
+plot_boxplot <- function(df){
+  plot_title <- df$source[1]
+  
+  out_plot <- ggplot(df) +
+    aes(--------------------) +
+    ----------------- +
+    labs(title = plot_title)
+
+  return(out_plot)
+}
+
+plot_boxplot(part2_dfs[[1]])
+```
+
+
+5. Use `map()` to apply this function to `part2_dfs`. You don't have to assign it to a list.
+
+```{r}
+map(---------, ----------)
+
+```
